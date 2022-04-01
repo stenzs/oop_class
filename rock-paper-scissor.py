@@ -6,6 +6,7 @@ switcher = {
             "ножницы": 2
         }
 
+
 class Player:
 
     def __init__(self, name):
@@ -68,17 +69,25 @@ class Game:
 
     def __init__(self):
         self.end_game = False
+        self.rounds = 0
         self.first_player = Player(input("Введите свое имя: "))
         self.second_player = Player("Бот")
 
     def start(self):
+        while True:
+            user_rounds = input("Введите колличесво раундов для игры: ")
+            if user_rounds.isdigit() and int(user_rounds) > 0:
+                self.rounds = int(user_rounds)
+                break
+            else:
+                print("Не смешно")
         while not self.end_game:
             Game_round(self.first_player, self.second_player)
             self.check_and_condition()
 
     def check_and_condition(self):
-        answer = input("Продолжить игру? y/n")
-        if answer == "y":
+        self.rounds -= 1
+        if self.rounds > 0:
             Game_round(self.first_player, self.second_player)
             self.check_and_condition()
         else:
