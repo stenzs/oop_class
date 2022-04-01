@@ -1,3 +1,11 @@
+import random
+
+switcher = {
+            "камень": 0,
+            "бумага": 1,
+            "ножницы": 2
+        }
+
 class Player:
 
     def __init__(self, name):
@@ -9,12 +17,11 @@ class Player:
         self.choice = input("{name}, выбери камень, ножницы или бумагу: ".format(name=self.name))
         print("{name} выбрал {choice}".format(name=self.name, choice=self.choice))
 
+    def ii_choose(self):
+        self.choice = random.choice(list(switcher.keys()))
+        print("{name} выбрал {choice}".format(name=self.name, choice=self.choice))
+
     def to_numerical_choice(self):
-        switcher = {
-            "камень": 0,
-            "бумага": 1,
-            "ножницы": 2
-        }
         return switcher[self.choice]
 
     def increment_point(self):
@@ -29,8 +36,14 @@ class Game_round:
             [1, 0, -1],
             [-1, 1, 0]
         ]
-        player1.choose()
-        player2.choose()
+        while True:
+            player1.choose()
+            try:
+                player1.to_numerical_choice()
+                break
+            except Exception:
+                print("Ошибка, такое выбирать нельзя, давай заново")
+        player2.ii_choose()
         result = self.compare_choices(player1, player2)
         print("Результат раунда: {result}".format(result=self.get_result_as_string(result)))
         if result > 0:
@@ -41,7 +54,8 @@ class Game_round:
     def compare_choices(self, player1, player2):
         return self.rules[player1.to_numerical_choice()][player2.to_numerical_choice()]
 
-    def get_result_as_string(self, result):
+    @staticmethod
+    def get_result_as_string(result):
         res = {
             0: "ничья",
             1: "победа",
@@ -49,16 +63,13 @@ class Game_round:
         }
         return res[result]
 
-    def award_points(self):
-        print("implement")
-
 
 class Game:
 
     def __init__(self):
         self.end_game = False
-        self.first_player = Player("Spock")
-        self.second_player = Player("Kirk")
+        self.first_player = Player(input("Введите свое имя: "))
+        self.second_player = Player("Бот")
 
     def start(self):
         while not self.end_game:
