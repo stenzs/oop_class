@@ -1,0 +1,29 @@
+class PC:
+    def __init__(self, memory, cpu, **kw):
+        self.memory = memory
+        self.cpu = cpu
+
+
+class desktop(PC):
+    def __init__(self, memory, cpu, only_desktop_value, **kw):
+        super().__init__(memory, cpu, **kw)
+        self.only_notebook_value = only_desktop_value
+
+
+class notebook(PC):
+    def __init__(self, memory, cpu, only_notebook_value, **kw):
+        super().__init__(memory, cpu, **kw)
+        self.only_notebook_value = only_notebook_value
+
+
+class hybridPC(desktop, notebook):
+    def __init__(self, memory, cpu, only_desktop_value, only_notebook_value, only_hybrid_value):
+        super(hybridPC, self).__init__(memory=memory,
+                                       cpu=cpu, only_desktop_value=only_desktop_value,
+                                       only_notebook_value=only_notebook_value)
+        self.only_hybrid_value = only_hybrid_value
+
+
+print([x.__name__ for x in hybridPC.__mro__])
+pc = hybridPC(2048, 16, 51, 150, 321)
+print(pc.__dict__)
